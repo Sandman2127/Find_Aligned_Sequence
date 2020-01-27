@@ -8,6 +8,7 @@ parser.add_argument('-inputSam', type=str, help='i.e.: /path/to/your/sam/file.sa
 args = parser.parse_args()
 
 SAMFILE = args.inputSam
+testList = ['GTTTACCCGCCAATATATCCTGTCA','TAGATAAAG','GTTTACACCACAATATATCCTGCCA','TTGATCCCGAGGGGAACCCTGTGGT','GAGGGGTTGGATCAAAGTACT','CTGAAAGTTGACCCGCTTCATGG','CAGCTTGGTGTGATCCTCCGCCGGCAA','GCCTTGGCGTACCGCGTACATCTT','CAGATAGCAGCTCGGTAATGGTCTT','ATTTACTCTGGTAGCTGCGCGATGTATT','TCATCTACTCATTTATTCATTTGCTC','CCATGCCGCCTCCTTTAGCCGCTAAAAT','TCGGTGCCTGGTTGTTCTTGATTTT','CCACACATGGGGCATTCCACGGCG','TGTGGACGGAACACGCGGCCGGGCTTGTC','GGATCACCTCGCCAGCTCGTCGGTCA','GCGGTTGCCGGGATTCTTTGCGGATTCGA','ACTTCTCCACCAGGTCATCACCCAG','GCCGCGCCGATTTGTACCGGGCCGGA','CAGGTCGTAATCCCACACACTGGC','CTCTTTTCTCTTAGGTTTACCCGCCA','AATATCCGTTATTCTAATAAACG','ATAAACCTTTTCACGCCCTTTTA','TTGGCATGCACATACAAATGGACGAACGG','TTGATCCCGAGGGGAACCCTGTGG','GAACCCTGTGGTTGGCATGCACA','TATATCCTGTCAAACACTGATAGTTTA','CTAATAAACGCTCTTTTCT','CACTCAGAAGAACTCGTCAAGAAGGC']
 
 # SAM format
 # Col	Field	Type	Brief description
@@ -24,19 +25,23 @@ SAMFILE = args.inputSam
 # 11	QUAL	String	ASCII of Phred-scaled base QUALity+33
 
 def parse_sam():
-    with open(SAMFILE,'r') as inputFILE:
-        for line in inputFILE:
-            line = line.strip()
-            line = line.split()
-            #header
-            if line[0][0:1] == '@':
-                print(line)
+    for FINDSEQ in testList:
+        with open(SAMFILE,'r') as inputFILE:
+            for line in inputFILE:
+                line = line.strip()
+                line = line.split()
+                #header
+                if line[0][0:1] == '@':
+                    print(line)
+                else:
+                    QNAME,FLAG,RNAME,POS,MAPQ,CIGAR,RNEXT,PNEXT,TLEN,SEQ,QUAL = line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]
+                    match = re.search(str(FINDSEQ), str(SEQ))
+                    if match:
+                        print(line)
 
-            else:
-                QNAME,FLAG,RNAME,POS,MAPQ,CIGAR,RNEXT,PNEXT,TLEN,SEQ,QUAL = line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]
-                print(SEQ)
 
 def cat_and_print_line():
+    pass
 
 
 if __name__ == "__main__":
